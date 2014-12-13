@@ -1,0 +1,211 @@
+package main;
+
+import java.awt.Color;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+import shapePackage.Shape;
+
+public class Board extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public static final int BOARDHEIGHT = 25;
+	public static final int BOARDWIDTH = 10;
+	private final int REPEAT = 150;
+	private static final int DROPTIME = 1000;
+	public static int score = 0;
+	public static int level = 9;
+
+	private static Square[][] board = new Square[BOARDHEIGHT + 2][BOARDWIDTH];
+
+	private boolean optionReady = false;
+	private Shape current, next;
+	private Timer tLeft = new Timer(REPEAT, new TimerLeft());
+	private Timer tRight = new Timer(REPEAT, new TimerRight());
+	private Timer tManualDrop = new Timer(50, new TimerManualDrop());
+	private static Timer tDrop;
+
+	public Board() {
+		setLayout(new GridLayout(BOARDHEIGHT, BOARDWIDTH, 0, 0));
+		for (int i = BOARDHEIGHT + 1; i >= 0; --i) {
+			for (int j = 0; j < BOARDWIDTH; ++j) {
+				board[i][j] = new Square();
+				board[i][j].addKeyListener(new MyKeyListener());
+				if (i < BOARDHEIGHT)
+					add(board[i][j]);
+			}
+		}
+
+		current = Shape.getNewShape();
+		next = Shape.getNewShape();
+		tDrop = new Timer(DROPTIME - (level * 100), new TimerDrop());
+		tDrop.start();
+	}
+
+	public static Square[][] getInstance() {
+		return board;
+	}
+
+	public static void show(int row, int col, Color c) {
+		board[row][col].show(c);
+	}
+
+	public static boolean isSafe(int x, int y) {
+		return board[x][y].isSafe();
+	}
+
+	public static void clear(int row, int col) {
+		board[row][col].clear();
+	}
+
+	public static void set(int original_x, int original_y, int new_x, int new_y) {
+		board[original_x][original_y].setSquare(board[new_x][new_y]);
+	}
+
+	public static void incrementScore() {
+		UserInterface.scoreLabel.setText(Integer.toString(++score));
+		if (score % 20 == 0) {
+			UserInterface.levelLabel.setText(Integer.toString(++level));
+			int temp = DROPTIME - (level * 100);
+			if (temp <= 50)
+				tDrop.setDelay(50);
+			else
+				tDrop.setDelay(temp);
+		}
+	}
+
+	public void drop() {
+		if (current.canDrop()) {
+			current.drop();
+
+		} else {
+			current.checkLine();
+			current = next;
+			next = Shape.getNewShape();
+			current.show();
+		}
+	}
+
+	private class TimerLeft implements ActionListener {
+		public void actionPerformed(ActionEvent E) {
+			current.moveLeft();
+			tLeft.setDelay(50);
+		}
+	}
+
+	private class TimerRight implements ActionListener {
+		public void actionPerformed(ActionEvent E) {
+			current.moveRight();
+			tRight.setDelay(50);
+		}
+	}
+
+	private class TimerManualDrop implements ActionListener {
+		public void actionPerformed(ActionEvent E) {
+			drop();
+		}
+	}
+
+	private class TimerDrop implements ActionListener {
+		public void actionPerformed(ActionEvent E) {
+			if (!tManualDrop.isRunning())
+				drop();
+		}
+	}
+	
+	private class MyKeyListener implements KeyListener {
+
+		@Override
+		public void keyPressed(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			System.out.println(arg0.getKeyCode());
+
+			// down arrow
+			if (arg0.getKeyCode() == 40) {
+				if (!tManualDrop.isRunning()) {
+					drop();
+					tManualDrop.start();
+				}
+			}
+
+			// spacebar
+			if (arg0.getKeyCode() == 32) {
+				current.rotate();
+			}
+
+			// left arrow
+			if (arg0.getKeyCode() == 37) {
+				if (!tLeft.isRunning()) {
+					current.moveLeft();
+					clearTimer();
+					tLeft.start();
+				}
+			}
+			// right arrow
+			if (arg0.getKeyCode() == 39) {
+				if (!tRight.isRunning()) {
+					current.moveRight();
+					clearTimer();
+					tRight.start();
+				}
+			}
+
+			// control is pressed
+			if (arg0.getKeyCode() == 17) {
+				optionReady = true;
+			}
+
+			// quit with ctrl+w
+			if (arg0.getKeyCode() == 87 && optionReady) {
+				System.exit(0);
+			}
+		}
+
+		@Override
+		public void keyReleased(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+			System.out.println("releasing: " + arg0.getKeyCode());
+			if (arg0.getKeyCode() == 17) {
+				optionReady = false;
+			}
+			// left arrow
+			if (arg0.getKeyCode() == 37) {
+				tLeft.restart();
+				tLeft.stop();
+			}
+			// right arrow
+			if (arg0.getKeyCode() == 39) {
+				tRight.restart();
+				tRight.stop();
+			}
+
+			// down arrow
+			if (arg0.getKeyCode() == 40) {
+				tManualDrop.restart();
+				tManualDrop.stop();
+			}
+		}
+
+		@Override
+		public void keyTyped(KeyEvent arg0) {
+			// TODO Auto-generated method stub
+		}
+
+		private void clearTimer() {
+			tLeft.stop();
+			tRight.stop();
+		}
+
+	}
+
+}
+

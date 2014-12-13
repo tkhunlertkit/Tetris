@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<qualifiedTypeNameHistroy>
+<fullyQualifiedTypeName name="java.awt.Color"/>
+<fullyQualifiedTypeName name="javax.swing.JPanel"/>
+<fullyQualifiedTypeName name="main.UserInterface"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="java.awt.event.MouseListener"/>
+<fullyQualifiedTypeName name="java.awt.event.MouseMotionListener"/>
+<fullyQualifiedTypeName name="java.awt.event.FocusListener"/>
+<fullyQualifiedTypeName name="shapePackage.Shape.Direction"/>
+<fullyQualifiedTypeName name="javax.swing.Timer"/>
+<fullyQualifiedTypeName name="main.Board"/>
+</qualifiedTypeNameHistroy>
