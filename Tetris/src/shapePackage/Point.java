@@ -2,8 +2,6 @@ package shapePackage;
 import java.awt.Color;
 
 import main.Board;
-import main.UserInterface;
-import shapePackage.Shape.Direction;
 
 public class Point extends Shape {
 

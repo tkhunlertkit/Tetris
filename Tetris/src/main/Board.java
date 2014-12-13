@@ -181,7 +181,7 @@ public class Board extends JPanel {
 				}
 			}
 
-			// spacebar
+			// space bar
 			if (arg0.getKeyCode() == 32) {
 				current.rotate();
 			}

@@ -42,6 +42,7 @@ public abstract class Shape {
 	public abstract void showNext();
 
 	public static Shape getNewShape() {
+		@SuppressWarnings("unused")
 		int rand = (test==true)? numShape-1: (int) (Math.random() * numShape);
 		if (rand == 1)
 			return new SShape();
