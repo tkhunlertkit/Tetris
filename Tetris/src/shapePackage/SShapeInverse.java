@@ -21,7 +21,7 @@ import main.NextPiece;
 
 public class SShapeInverse extends Shape{
 	private Point center, N, E, SE;
-	private Color c = Shape.randomColor();
+	private static Color c = Shape.randomColor();
 	private int orientation = 1;
 	
 	public SShapeInverse() {
@@ -30,6 +30,24 @@ public class SShapeInverse extends Shape{
 		E = new Point(center.getX()+1, center.getY());
 		SE = new Point(center.getX()+1, center.getY()-1);
 		showNext();
+	}
+	
+	public SShapeInverse(boolean sn) {
+		center = new Point();
+		N = new Point(center.getX(), center.getY()+1);
+		E = new Point(center.getX()+1, center.getY());
+		SE = new Point(center.getX()+1, center.getY()-1);
+	}
+	
+	@Override
+	public Shape clone() {
+		SShapeInverse s = new SShapeInverse(true);
+		s.center = new Point(center.getX(), center.getY());
+		s.N = new Point(N.getX(), N.getY());
+		s.E = (Point) E.clone();
+		s.SE = (Point) SE.clone();
+		s.orientation = orientation;
+		return s;
 	}
 
 	@Override
@@ -171,6 +189,31 @@ public class SShapeInverse extends Shape{
 		points.add(SE);
 		NextPiece.showPiece(c, points);
 		
+	}
+
+	@Override
+	public void setColor(Color c) {
+		// TODO Auto-generated method stub
+		this.c = c;
+	}
+
+	@Override
+	public void setSafe() {
+		// TODO Auto-generated method stub
+		center.setSafe(); 
+		N.setSafe();
+		E.setSafe();
+		SE.setSafe();
+		
+	}
+
+	@Override
+	public void showWithoutSetState() {
+		// TODO Auto-generated method stub
+		center.showWithoutSetState();
+		N.showWithoutSetState();
+		E.showWithoutSetState();
+		SE.showWithoutSetState();
 	}
 
 }

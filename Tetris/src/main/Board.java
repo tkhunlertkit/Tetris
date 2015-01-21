@@ -34,6 +34,7 @@ public class Board extends JPanel {
 	private static Square[][] board = new Square[BOARDHEIGHT + 2][BOARDWIDTH];
 
 	private boolean optionReady = false;
+	private boolean ghostOption = true;
 	private static Shape current;
 
 	private static Shape next;
@@ -54,6 +55,7 @@ public class Board extends JPanel {
 		}
 
 		current = Shape.getNewShape();
+		showGhost();
 		next = Shape.getNewShape();
 		tDrop = new Timer(DROPTIME - (level * 100), new TimerDrop());
 		tDrop.start();
@@ -65,7 +67,11 @@ public class Board extends JPanel {
 	}
 
 	public static void show(int row, int col, Color c) {
-		board[row][col].show(c);
+		board[row][col].show(c, false);
+	}
+	
+	public static void showGhost(int row, int col, Color c) {
+		board[row][col].show(c, true);
 	}
 
 	public static boolean isSafe(int x, int y) {
@@ -74,6 +80,10 @@ public class Board extends JPanel {
 
 	public static void clear(int row, int col) {
 		board[row][col].clear();
+	}
+	
+	public static void setSafe(int row, int col) {
+		board[row][col].setSafe();
 	}
 
 	public static void set(int original_x, int original_y, int new_x, int new_y) {
@@ -136,12 +146,22 @@ public class Board extends JPanel {
 			current = next;
 			next = Shape.getNewShape();
 			current.show();
+			showGhost();
+			System.out.println("Next");
 		}
+	}
+
+	private void showGhost() {
+		if(ghostOption)
+			current.showGhost();
 	}
 
 	private class TimerLeft implements ActionListener {
 		public void actionPerformed(ActionEvent E) {
 			current.moveLeft();
+			current.clearGhost();
+			if (current.canDrop())
+				showGhost();
 			tLeft.setDelay(50);
 		}
 	}
@@ -149,6 +169,9 @@ public class Board extends JPanel {
 	private class TimerRight implements ActionListener {
 		public void actionPerformed(ActionEvent E) {
 			current.moveRight();
+			current.clearGhost();
+			if (current.canDrop())
+				showGhost();
 			tRight.setDelay(50);
 		}
 	}
@@ -161,8 +184,9 @@ public class Board extends JPanel {
 
 	private class TimerDrop implements ActionListener {
 		public void actionPerformed(ActionEvent E) {
-			if (!tManualDrop.isRunning())
+			if (!tManualDrop.isRunning()) {
 				drop();
+			}
 		}
 	}
 
@@ -184,12 +208,18 @@ public class Board extends JPanel {
 			// space bar
 			if (arg0.getKeyCode() == 32) {
 				current.rotate();
+				current.clearGhost();
+				if (current.canDrop())
+					showGhost();
 			}
 
 			// left arrow
 			if (arg0.getKeyCode() == 37) {
 				if (!tLeft.isRunning()) {
 					current.moveLeft();
+					current.clearGhost();
+					if (current.canDrop())
+						showGhost();
 					clearTimer();
 					tLeft.start();
 				}
@@ -198,6 +228,9 @@ public class Board extends JPanel {
 			if (arg0.getKeyCode() == 39) {
 				if (!tRight.isRunning()) {
 					current.moveRight();
+					current.clearGhost();
+					if (current.canDrop())
+						showGhost();
 					clearTimer();
 					tRight.start();
 				}
@@ -219,6 +252,13 @@ public class Board extends JPanel {
 					tDrop.stop();
 				else
 					tDrop.start();
+			}
+			if (arg0.getKeyCode() == 71 && optionReady) {
+				ghostOption = !ghostOption;
+				if (!ghostOption) {
+					current.clearGhost();
+				}
+				
 			}
 		}
 
@@ -256,6 +296,7 @@ public class Board extends JPanel {
 			tLeft.stop();
 			tRight.stop();
 		}
+		
 
 	}
 

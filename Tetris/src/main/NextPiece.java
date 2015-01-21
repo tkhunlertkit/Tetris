@@ -28,7 +28,7 @@ public class NextPiece extends JPanel{
 	
 	public static void showPiece(Color c, ArrayList<Point> points) {
 		for (Point p: points) {
-			board[p.getY()][p.getX()].show(c);
+			board[p.getY()][p.getX()].show(c, false);
 		}
 	}
 	

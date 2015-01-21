@@ -21,7 +21,7 @@ import main.NextPiece;
 public class LShapeInverse extends Shape{
 
 	private Point center, W, N, NN;
-	private Color c = Shape.randomColor();
+	private static Color c = Shape.randomColor();
 	private int orientation = 1;
 
 	public LShapeInverse() {
@@ -31,7 +31,24 @@ public class LShapeInverse extends Shape{
 		W = new Point(center.getX()-1, center.getY());
 		showNext();
 	}
+	
+	public LShapeInverse(boolean sn) {
+		center = new Point();
+		N = new Point(center.getX(), center.getY()+1);
+		NN = new Point(center.getX(), center.getY()+2);
+		W = new Point(center.getX()-1, center.getY());
+	}
 
+	@Override
+	public Shape clone(){
+		LShapeInverse n = new LShapeInverse(true);
+		n.center = (Point) center.clone();
+		n.N = (Point) N.clone();
+		n.NN = (Point) NN.clone();
+		n.W = (Point) W.clone();
+		n.orientation = orientation;
+		return n;
+	}
 	@Override
 	public void rotate() {
 		clear();
@@ -224,6 +241,30 @@ public class LShapeInverse extends Shape{
 		points.add(W);
 		NextPiece.showPiece(c, points);
 		
+	}
+
+	@Override
+	public void setColor(Color c) {
+		// TODO Auto-generated method stub
+		this.c = c;
+	}
+
+	@Override
+	public void setSafe() {
+		// TODO Auto-generated method stub
+		center.setSafe(); 
+		W.setSafe();
+		N.setSafe();
+		NN.setSafe();
+	}
+
+	@Override
+	public void showWithoutSetState() {
+		// TODO Auto-generated method stub
+		center.showWithoutSetState();
+		W.showWithoutSetState();
+		N.showWithoutSetState();
+		NN.showWithoutSetState();
 	}
 	
 	

@@ -14,6 +14,13 @@ public class Point extends Shape {
 		y = Board.BOARDHEIGHT-1;
 	}
 
+	@Override
+	public Shape clone(){
+		Point p = new Point();
+		p.x = x;
+		p.y = y;
+		return p;
+	}
 	public Point(int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -140,6 +147,21 @@ public class Point extends Shape {
 	@Override
 	public void showNext() {
 		return;
+		
+	}
+	
+	@Override
+	public void setColor(Color c) { }
+
+	@Override
+	public void setSafe() {
+		// TODO Auto-generated method stub
+		Board.setSafe(x, y);
+	}
+
+	@Override
+	public void showWithoutSetState() {
+		Board.showGhost(y, x, Color.WHITE);
 		
 	}
 

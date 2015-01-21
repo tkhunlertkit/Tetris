@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import main.Board;
 import main.NextPiece;
+import main.Square;
 
 /**
  *    ____ ____
@@ -18,7 +19,7 @@ import main.NextPiece;
 public class SquareShape extends Shape{
 
 	private Point center, N, W, NW;
-	private Color c = Shape.randomColor();
+	private static Color c = Shape.randomColor();
 	
 	public SquareShape() {
 		center = new Point();
@@ -28,6 +29,22 @@ public class SquareShape extends Shape{
 		showNext();
 	}
 	
+	public SquareShape(boolean sn) {
+		center = new Point();
+		N = new Point(center.getX(), center.getY()+1);
+		W = new Point(center.getX()-1, center.getY());
+		NW = new Point(center.getX()-1, center.getY()+1);
+	}
+	
+	@Override
+	public Shape clone() {
+		SquareShape s = new SquareShape(true);
+		s.center = (Point) center.clone();
+		s.N = (Point) N.clone();
+		s.W = (Point) W.clone();
+		s.NW = (Point) NW.clone();
+		return s;
+	}
 	@Override
 	public void rotate() {	}
 
@@ -105,5 +122,29 @@ public class SquareShape extends Shape{
 		NextPiece.showPiece(c, points);
 		
 	} 
+
+	@Override
+	public void setColor(Color c) {
+		// TODO Auto-generated method stub
+		this.c = c;
+	}
+
+	@Override
+	public void setSafe() {
+		// TODO Auto-generated method stub
+		center.setSafe();
+		N.setSafe();
+		W.setSafe();
+		NW.setSafe();
+	}
+
+	@Override
+	public void showWithoutSetState() {
+		// TODO Auto-generated method stub
+		center.showWithoutSetState();
+		N.showWithoutSetState();
+		W.showWithoutSetState();
+		NW.showWithoutSetState();
+	}
 	
 }

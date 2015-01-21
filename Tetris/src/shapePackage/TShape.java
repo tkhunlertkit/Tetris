@@ -21,7 +21,7 @@ import main.NextPiece;
 public class TShape extends Shape{
 	
 	private Point center, W, E, S;
-	private Color c = Shape.randomColor();
+	private static Color c = Shape.randomColor();
 	private int orientation = 1;
 
 	public TShape() {
@@ -30,6 +30,24 @@ public class TShape extends Shape{
 		E = new Point(center.getX()+1, center.getY());
 		S = new Point(center.getX(), center.getY()-1);
 		showNext();
+	}
+
+	public TShape(boolean sn) {
+		center = new Point();
+		W = new Point(center.getX()-1, center.getY());
+		E = new Point(center.getX()+1, center.getY());
+		S = new Point(center.getX(), center.getY()-1);
+	}
+	
+	@Override
+	public Shape clone() {
+		TShape t = new TShape(true);
+		t.center = (Point) center.clone();
+		t.W = (Point) W.clone();
+		t.E = (Point) E.clone();
+		t.S = (Point) S.clone();
+		t.orientation = orientation;
+		return t;
 	}
 
 	@Override
@@ -213,6 +231,30 @@ public class TShape extends Shape{
 		points.add(E);
 		points.add(S);
 		NextPiece.showPiece(c, points);
+	}
+
+	@Override
+	public void setColor(Color c) {
+		// TODO Auto-generated method stub
+		this.c = c;
+	}
+
+	@Override
+	public void setSafe() {
+		// TODO Auto-generated method stub
+		center.setSafe();
+		W.setSafe();
+		E.setSafe();
+		S.setSafe();
+	}
+
+	@Override
+	public void showWithoutSetState() {
+		// TODO Auto-generated method stub
+		center.showWithoutSetState();
+		W.showWithoutSetState();
+		E.showWithoutSetState();
+		S.showWithoutSetState();
 	}
 
 }

@@ -24,7 +24,7 @@ import main.NextPiece;
 public class LongShape extends Shape {
 
 	private Point center, S, N, NN;
-	private Color c = Shape.randomColor();
+	private static Color c = Shape.randomColor();
 	private int orientation = 1;
 
 	public LongShape() {
@@ -33,6 +33,24 @@ public class LongShape extends Shape {
 		N = new Point(center.getX(), center.getY() + 1);
 		S = new Point(center.getX(), center.getY() - 1);
 		showNext();
+	}
+	
+	public LongShape(boolean sn) {
+		center = new Point();
+		NN = new Point(center.getX(), center.getY() + 2);
+		N = new Point(center.getX(), center.getY() + 1);
+		S = new Point(center.getX(), center.getY() - 1);
+	}
+	
+	@Override
+	public Shape clone() {
+		LongShape l = new LongShape(true);
+		l.center = (Point) center.clone();
+		l.NN = (Point) NN.clone();
+		l.N = (Point) N.clone();
+		l.S = (Point) S.clone();
+		l.orientation = orientation;
+		return l;
 	}
 
 	@Override
@@ -174,4 +192,29 @@ public class LongShape extends Shape {
 		NextPiece.showPiece(c, points);
 	}
 
+	@Override
+	public void setColor(Color c) {
+		// TODO Auto-generated method stub
+		this.c = c;
+	}
+
+	@Override
+	public void setSafe() {
+		// TODO Auto-generated method stub
+		center.setSafe(); 
+		S.setSafe();
+		N.setSafe(); 
+		NN.setSafe();
+	}
+
+	@Override
+	public void showWithoutSetState() {
+		// TODO Auto-generated method stub
+		center.showWithoutSetState();
+		S.showWithoutSetState();
+		N.showWithoutSetState();
+		NN.showWithoutSetState();
+	}
+
+	
 }

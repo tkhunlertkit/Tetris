@@ -26,7 +26,7 @@ public class LShape extends Shape {
 	private Point N;
 	private Point E;
 	private int orientation = 1;
-	private Color c = colorLookup[(int) (Math.random() * 4)];
+	private static Color c = colorLookup[(int) (Math.random() * 4)];
 
 	public LShape() {
 		center = new Point();
@@ -35,7 +35,24 @@ public class LShape extends Shape {
 		E = new Point(center.getX() + 1, center.getY());
 		showNext();
 	}
+	
+	public LShape(boolean sn) {
+		center = new Point();
+		NN = new Point(center.getX(), center.getY() + 2);
+		N = new Point(center.getX(), center.getY() + 1);
+		E = new Point(center.getX() + 1, center.getY());
+	}
 
+	@Override
+	public Shape clone() {
+		LShape l = new LShape(true);
+		l.center = (Point) center.clone();
+		l.NN = (Point) NN.clone();
+		l.N = (Point) N.clone();
+		l.E = (Point) E.clone();
+		l.orientation = orientation;
+		return l;
+	}
 	@Override
 	public void drop() {
 		if (canDrop()) {
@@ -309,6 +326,30 @@ public class LShape extends Shape {
 		points.add(E);
 		NextPiece.showPiece(c, points);
 		
+	}
+	
+	@Override
+	public void setColor(Color c) {
+		// TODO Auto-generated method stub
+		this.c = c;
+	}
+
+	@Override
+	public void setSafe() {
+		// TODO Auto-generated method stub
+		center.setSafe();
+		N.setSafe();
+		NN.setSafe();
+		E.setSafe();
+	}
+
+	@Override
+	public void showWithoutSetState() {
+		// TODO Auto-generated method stub
+		center.showWithoutSetState();
+		N.showWithoutSetState();
+		NN.showWithoutSetState();
+		E.showWithoutSetState();
 	}
 
 }

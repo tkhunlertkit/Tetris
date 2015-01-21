@@ -22,25 +22,33 @@ public class SShape extends Shape {
 
 	private Point center, N, W, SW;
 	private int orientation = 1;
-	private Color c;
+	private static Color c = Shape.randomColor();
 
 	public SShape() {
 		center = new Point();
 		N = new Point(center.getX(), center.getY() + 1);
 		W = new Point(center.getX() - 1, center.getY());
 		SW = new Point(center.getX() - 1, center.getY() - 1);
-		c = Shape.colorLookup[(int) (Math.random() * 4)];
 		showNext();
 	}
-
-	public SShape(Point center2) {
-		center = center2;
+	
+	public SShape(boolean sn) {
+		center = new Point();
 		N = new Point(center.getX(), center.getY() + 1);
 		W = new Point(center.getX() - 1, center.getY());
 		SW = new Point(center.getX() - 1, center.getY() - 1);
-		c = Shape.colorLookup[(int) (Math.random() * 4)];
 	}
 
+	@Override
+	public Shape clone() {
+		SShape s = new SShape(true);
+		s.center = (Point) center.clone();
+		s.N = (Point) N.clone();
+		s.W = (Point) W.clone();
+		s.SW = (Point) SW.clone();
+		s.orientation = orientation;
+		return s;
+	}
 	@Override
 	public void drop() {
 		if (canDrop()) {
@@ -178,6 +186,30 @@ public class SShape extends Shape {
 		points.add(SW);
 		NextPiece.showPiece(c, points);
 		
+	}
+
+	@Override
+	public void setColor(Color c) {
+		// TODO Auto-generated method stub
+		this.c = c;
+	}
+
+	@Override
+	public void setSafe() {
+		// TODO Auto-generated method stub
+		center.setSafe();
+		N.setSafe();
+		W.setSafe();
+		SW.setSafe();
+	}
+
+	@Override
+	public void showWithoutSetState() {
+		// TODO Auto-generated method stub
+		center.showWithoutSetState();
+		N.showWithoutSetState();
+		W.showWithoutSetState();
+		SW.showWithoutSetState();
 	}
 
 }

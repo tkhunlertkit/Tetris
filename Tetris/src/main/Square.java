@@ -37,9 +37,15 @@ public class Square extends JButton {
 		return state == STATE.FREE;
 	}
 
-	public void show(Color c) {
-		setBackground(c);
-		state = STATE.TAKEN;
+	public void show(Color c, boolean ghost) {
+		if (!ghost) {
+			setBackground(c);
+			state = STATE.TAKEN;
+		}
+		else {
+			setBackground(Color.WHITE);
+			state = STATE.FREE;
+		}
 	}
 
 	public void clear() {
@@ -50,6 +56,11 @@ public class Square extends JButton {
 	public void setSquare(Square s) {
 		state = s.state;
 		setBackground(s.getBackground());
+	}
+
+	public void setSafe() {
+		// TODO Auto-generated method stub
+		state = STATE.FREE;
 	}
 
 }
